@@ -1,0 +1,5 @@
+.docker/dbdata/
+.idea/
+.vscode/
+.phpunit.result.cache
+/node_modules
