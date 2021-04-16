@@ -21,7 +21,7 @@ const LoadingProvider = (props: LoadingProviderProps) => {
     useMemo(() => {
         let isSubscribed = true;
         const requestIds = addGlobalRequestInterceptor((config) => {
-            if(isSubscribed){
+            if (isSubscribed && !config.headers.hasOwnProperty('x-ignore-loading')) {
                 setLoading(true);
                 setCountRequest(prevState => prevState + 1);
             }
@@ -29,12 +29,14 @@ const LoadingProvider = (props: LoadingProviderProps) => {
         })
 
         const responseIds = addGlobalResponseInterceptor((response) =>{
-            if(isSubscribed){
+            if (isSubscribed && !response.config.headers.hasOwnProperty('x-ignore-loading')) {
                 decrementCountRequest();
             }
             return response
         }, (error) => {
-            decrementCountRequest();
+            if (isSubscribed && !error.config.headers.hasOwnProperty('x-ignore-loading')) {
+                decrementCountRequest();
+            }
             return Promise.reject(error)
         })
 
@@ -51,7 +53,7 @@ const LoadingProvider = (props: LoadingProviderProps) => {
         }
     },[countRequest])
 
-    console.log(countRequest)
+
 
     function decrementCountRequest(){
         setCountRequest(prevState => prevState - 1);

@@ -62,7 +62,7 @@ const CategoryField = React.forwardRef<CategoryFieldComponent, CategoryFieldProp
     return (
         <>
         <AsyncAutocomplete
-           // ref={autocompleteRef}
+            ref={autocompleteRef}
             AutocompleteProps={{
                 getOptionLabel: option => option.name,
                 onChange: (event,value) => addItem(value),

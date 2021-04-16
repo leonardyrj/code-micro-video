@@ -4,7 +4,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useSnackbar} from "notistack";
 import {useHistory, useParams} from "react-router";
- import {createRef, MutableRefObject, useContext, useEffect, useRef, useState} from "react";
+ import {createRef, MutableRefObject, useContext, useEffect, useMemo, useRef, useState} from "react";
 import videoHttp from "../../../../util/http/video-http";
 import {Video, VideoFileFieldsMap} from "../../../../util/models";
 import {DefaultForm} from "../../../../components/DefaultForm";
@@ -19,14 +19,14 @@ import CategoryField, {CategoryFieldComponent} from "./CategoryField";
 import CastMemberField, {CastMemberFieldComponent} from "./CastMemberField";
 import {omit,zipObject} from 'lodash'
 import {InputFileComponent} from "../../../../components/InputFile";
-
 import LoadingContext from "../../../../components/loading/LoadingContext";
- import SnackbarUpload from "../../../../components/SnackbarUpload";
+import SnackbarUpload from "../../../../components/SnackbarUpload";
 import {useSelector,useDispatch} from 'react-redux';
-import {State as UploadState, Upload} from "../../../../store/upload/types";
+import {FileInfo, Upload, UploadModule} from "../../../../store/upload/types";
 import {Creators} from "../../../../store/upload";
-
 import useSnackBarFormError from '../../../../hooks/useSnackbarFormError';
+import {Simulate} from "react-dom/test-utils";
+
 
 
 
@@ -111,7 +111,7 @@ export const Form = () => {
     const history = useHistory();
     const {id} = useParams<{id: string}>();
     const [video, setVideo] = useState<Video | null>(null);
-
+    console.log(id)
     const loading = useContext(LoadingContext);
 
 
@@ -127,28 +127,10 @@ export const Form = () => {
     ) as MutableRefObject<{[key: string] : MutableRefObject<InputFileComponent>}>
 
 
-    const uploads = useSelector<UploadState, Upload[]>(
-        (state) => state.uploads
+    const uploads = useSelector<UploadModule, Upload[]>(
+        (state) => state.upload.uploads
     );
     const dispatch = useDispatch();
-
-    setTimeout(()=> {
-        const obj: any = {
-            video:{
-                id: 1,
-                title: 'E o vento levou'
-            },
-            files:[
-                {file: new File([""],'tete.mp4')}
-            ]
-        }
-        dispatch(Creators.addUpload(obj))
-
-    }, 1000);
-
-    console.log(uploads)
-
-
 
     useEffect(() => {
         //Registrando de forma manual no useForm
@@ -164,20 +146,6 @@ export const Form = () => {
 
 
     useEffect(() => {
-
-        snackbar.enqueueSnackbar('', {
-            key: 'snackbar-upload',
-            persist: true,
-            anchorOrigin:{
-                horizontal: 'right',
-                vertical: 'bottom'
-            },
-            content: (key,message) => {
-                const id = key as any;
-                return <SnackbarUpload id={id}/>
-            }
-        })
-
         if (!id) {
             return;
         }
@@ -204,21 +172,26 @@ export const Form = () => {
     }, []);
 
     useSnackBarFormError(formState.submitCount, errors);
+
     async function onSubmit(formData, event) {
-        const sendData = omit(formData,['cast_members','genres','categories']);
+        const sendData = omit(
+            formData,
+            [...fileFields, 'cast_members', 'genres', 'categories']
+        );
         sendData['cast_members_id'] = formData['cast_members'].map(cast_member => cast_member.id);
         sendData['categories_id'] = formData['categories'].map(category => category.id);
         sendData['genres_id'] = formData['genres'].map(genre => genre.id);
+
         try {
             const http = !video
                 ? videoHttp.create(sendData)
-                : videoHttp.update(video.id,formData);
+                : videoHttp.update(video.id, sendData);
             const {data} = await http;
-            console.log(data)
             snackbar.enqueueSnackbar(
                 'Vídeo salvo com sucesso',
                 {variant: 'success'}
             );
+            uploadFiles(data);
             id && resetForm(video);
             setTimeout(() => {
                 event
@@ -235,7 +208,6 @@ export const Form = () => {
                 'Não foi possível salvar o vídeo',
                 {variant: 'error'}
             )
-
         }
     }
 
@@ -249,7 +221,28 @@ export const Form = () => {
         reset(data)
     }
 
-    // @ts-ignore
+    function uploadFiles(video){
+        const files: FileInfo[] = fileFields
+            .filter(file => getValues()[file])
+            .map(fileField => ({fileField, file: getValues()[fileField]}))
+        console.log(video)
+        dispatch(Creators.addUpload({video, files}))
+
+        snackbar.enqueueSnackbar('', {
+            key: 'snackbar-upload',
+            persist: true,
+            anchorOrigin:{
+                horizontal: 'right',
+                vertical: 'bottom'
+            },
+            content: (key,message) => {
+                const id = key as any;
+                return <SnackbarUpload id={id}/>
+            }
+        })
+    }
+
+
     return (
         <DefaultForm
             GridItemProps={{xs: 12}}
@@ -315,7 +308,7 @@ export const Form = () => {
                         </Grid>
                     </Grid>
                     <CastMemberField
-                        //ref={castMemberRef}
+                        ref={castMemberRef}
                         castMembers={watch('cast_members')}
                         setCastMembers={(value) => setValue('cast_members', value, {shouldValidate: true})}
                         error={errors.cast_members}
@@ -325,6 +318,7 @@ export const Form = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
                             <GenreField
+                                ref={genreRef}
                                 genres={watch('genres')}
                                 setGenres={(value) => setValue('genres',value,{shouldValidate: true})}
                                 categories={watch('categories')}
@@ -334,6 +328,7 @@ export const Form = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <CategoryField
+                                ref={categoryRef}
                                 categories={watch('categories')}
                                 setCategories={(value) => setValue('categories',value,{shouldValidate: true})}
                                 genres={watch('genres')}

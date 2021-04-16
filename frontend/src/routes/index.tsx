@@ -8,6 +8,8 @@ import GenreForm from "../pages/genre/GenreForm";
 import CastMemberForm from "../pages/cast-member/CastMemberForm";
 import VideoList from '../pages/video/PageList';
 import VideoForm from '../pages/video/PageForm';
+import UploadPage from "../pages/uploads";
+
 
 
 
@@ -108,6 +110,14 @@ const routes: MyRoutesProps[] = [
         component: VideoForm,
         exact: true
     },
+    {
+        name: 'uploads',
+        label: 'Uploads',
+        path: '/uploads',
+        component: UploadPage,
+        exact: true
+    }
+
 
 
 ]

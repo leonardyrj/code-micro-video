@@ -50,7 +50,7 @@ const CastMemberField = React.forwardRef<CastMemberFieldComponent, CastMemberFie
     return (
         <>
             <AsyncAutocomplete
-               // ref={autocompleteRef}
+                ref={autocompleteRef}
                 fetchOptions={fetchOptions}
                 AutocompleteProps={{
                     //autoSelect: true,

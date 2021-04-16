@@ -37,8 +37,6 @@ class VideoController extends BaseCrudController
             'banner_file' => 'image|max:' . Video::BANNER_FILE_MAX_SIZE,
             'trailer_file' => 'mimetypes:video/mp4|max:' . Video::TRAILER_FILE_MAX_SIZE,
             'video_file' => 'mimetypes:video/mp4|max:' . Video::VIDEO_FILE_MAX_SIZE,
-
-
         ];
     }
 
@@ -54,9 +52,12 @@ class VideoController extends BaseCrudController
     public function update(Request $request, $id)
     {
         $obj = $this->findOrFail($id);
-        $self = $this;
         $this->addRuleIfGenreHasCategories($request);
-        $validatedData = $this->validate($request, $this->rulesUpdate());
+        $validatedData = $this->validate(
+            $request,
+            $request->isMethod('PUT') ? $this->rulesUpdate() : $this->rulesPatch()
+        );
+
         $obj->update($validatedData);
         return $obj;
     }
@@ -97,12 +98,11 @@ class VideoController extends BaseCrudController
     {
         $action = \Route::getCurrentRoute()->getAction()['uses'];
         return parent::queryBuilder()->with([
-            strpos($action, 'show') !== false
-            || strpos($action, 'store') !== false
-            || strpos($action, 'update') !== false
-                ? 'genres.categories'
-                : 'genres',
-            'categories'
+            strpos($action, 'index') !== false
+                ? 'genres'
+                : 'genres.categories',
+            'categories',
+            'castMembers'
         ]);
     }
 
