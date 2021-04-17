@@ -38,7 +38,7 @@ export default function useFilter(options: UseFilterOptions){
 
     useEffect(() => {
         filterManager.replaceHistory();
-    },[])
+    },[filterManager])
 
 
     filterManager.state = filterState;

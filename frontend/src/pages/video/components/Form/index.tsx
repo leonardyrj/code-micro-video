@@ -225,7 +225,11 @@ export const Form = () => {
         const files: FileInfo[] = fileFields
             .filter(file => getValues()[file])
             .map(fileField => ({fileField, file: getValues()[fileField]}))
-        console.log(video)
+
+        if(!files.length){
+            return;
+        }
+
         dispatch(Creators.addUpload({video, files}))
 
         snackbar.enqueueSnackbar('', {

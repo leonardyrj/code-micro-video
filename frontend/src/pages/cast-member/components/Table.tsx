@@ -7,7 +7,7 @@ import {CastMember, CastMemberTypeMap, ListResponse} from "../../../util/models"
 import {IconButton, MuiThemeProvider} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import DefaultTable, {makeActionStyles, TableColumn, MuiDataTableRefComponent} from '../../../components/Table';
+import DefaultTable, {makeActionStyles, TableColumn} from '../../../components/Table';
 import {useSnackbar} from "notistack";
 import {useRef} from "react";
 import useFilter from "../../../hooks/useFilter";
@@ -92,14 +92,13 @@ const Table = () => {
     const subscribed = useRef(true);
     const [data, setData] = useState<CastMember[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const tableRef = useRef() as React.MutableRefObject<MuiDataTableRefComponent>;
+
 
     const {
         columns,
         filterManager,
         filterState,
         debouncedFilterState,
-        dispatch,
         totalRecords,
         setTotalRecords,
     } = useFilter({

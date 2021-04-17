@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import MUIDataTable, {MUIDataTableColumn} from "mui-datatables";
-import httpVideo from "../../../util/http";
+import {MUIDataTableColumn} from "mui-datatables";
 import format from "date-fns/format"
 import parseISO from "date-fns/parseISO"
 import categoryHttp from "../../../util/http/category-http";
@@ -10,7 +9,7 @@ import {Category, Genre, ListResponse} from "../../../util/models";
 import useFilter from "../../../hooks/useFilter";
 import * as yup from "../../../util/vendor/yup";
 import {MuiThemeProvider} from "@material-ui/core";
-import DefaultTable, {makeActionStyles, TableColumn} from '../../../components/Table'
+import DefaultTable, {makeActionStyles} from '../../../components/Table'
 import FilterResetButton from "../../../components/Table/FilterResetButton";
 
 
@@ -58,14 +57,13 @@ const Table = () => {
     const subscribed = useRef(true);
     const [data, setData] = useState<Genre[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [categories, setCategories] = useState<Category[]>();
+
 
     const {
         columns,
         filterManager,
         filterState,
         debouncedFilterState,
-        dispatch,
         totalRecords,
         setTotalRecords,
     } = useFilter({

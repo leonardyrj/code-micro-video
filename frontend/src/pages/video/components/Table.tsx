@@ -1,19 +1,19 @@
 import * as React from 'react';
-import {useContext, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
 import videoHttp from "../../../util/http/video-http";
 import {Video, ListResponse} from "../../../util/models";
-import DefaultTable, {makeActionStyles, TableColumn, MuiDataTableRefComponent} from '../../../components/Table';
+import DefaultTable, {makeActionStyles, TableColumn} from '../../../components/Table';
 import {useSnackbar} from "notistack";
-import {IconButton, MuiThemeProvider, Theme} from "@material-ui/core";
+import {IconButton, MuiThemeProvider} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import EditIcon from '@material-ui/icons/Edit';
 import FilterResetButton from "../../../components/Table/FilterResetButton";
 import useFilter from "../../../hooks/useFilter";
 import useDeleteCollection from "../../../hooks/useDeleteCollection";
 import DeleteDialog from "../../../components/DeleteDialog";
-import LoadingContext from "../../../components/loading/LoadingContext";
+
 
 
 const columnsDefinition: TableColumn[] = [
@@ -103,16 +103,7 @@ const Table = () => {
     const {openDeleteDialog, setOpenDeleteDialog, rowsToDelete, setRowsToDelete} = useDeleteCollection();
 
 
-    const tableRef = useRef() as React.MutableRefObject<MuiDataTableRefComponent>;
-    const loadingContext = useContext(LoadingContext);
-    console.log(loadingContext);
 
-    //const tableRef = useRef() as React.MutableRefObject<MuiDataTableRefComponent>;
-
-    //property, funcao - changePage changeRowsPerPage
-
-    //const tableRef = useRef() as React.MutableRefObject<MuiDataTableRefComponent>;
-//property, funcao - changePage changeRowsPerPage
 
     const {
         columns,
@@ -126,7 +117,7 @@ const Table = () => {
         debounceTime: debounceTime,
         rowsPerPage,
         rowsPerPageOptions,
-        //tableRef
+
     });
 
     useEffect(() => {

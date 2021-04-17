@@ -29,6 +29,8 @@ class Video extends Model
         'video_file',
         'thumb_file'
     ];
+   /*Alterando o tipo da chave primaria para string*/
+    protected $keyType = 'string';
 
     protected $dates = ['deleted_at'];
 

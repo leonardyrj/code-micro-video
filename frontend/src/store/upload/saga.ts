@@ -14,7 +14,7 @@ export function* uploadWatcherSaga(){
         const {payload}: AddUploadAction = yield take(newFilesChannel);
         for(const fileInfo of payload.files){
             try{
-                const response = yield call(uploadFile, {video: payload.video, fileInfo});
+               yield call(uploadFile, {video: payload.video, fileInfo});
             }catch (e){
                 console.log(e)
             }

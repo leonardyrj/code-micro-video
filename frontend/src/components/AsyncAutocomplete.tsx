@@ -17,7 +17,7 @@ export interface AsyncAutocompleteComponent {
 
 
 const AsyncAutocomplete = React.forwardRef<AsyncAutocompleteComponent,AsyncAutocompleteProps>((props,ref) => {
-    const {AutocompleteProps, debounceTime = 300} = props;
+    const {AutocompleteProps, debounceTime = 300,fetchOptions} = props;
     const {freeSolo,onOpen, onClose} = AutocompleteProps as any;
     const [open, setOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
@@ -30,18 +30,21 @@ const AsyncAutocomplete = React.forwardRef<AsyncAutocompleteComponent,AsyncAutoc
         if (!open && !freeSolo) {
             setOptions([]);
         }
-    }, [open]);
+    }, [open,freeSolo]);
 
     useEffect(() => {
-    if(!open || debouncedSearchText === "" && freeSolo ){
-          return;
+    if(!open){
+        return;
+    }
+    if(debouncedSearchText === "" && freeSolo ){
+        return;
     }
 
     let isSubscribed = true;
     (async () => {
       setLoading(true);
       try {
-          const  data = await props.fetchOptions(debouncedSearchText);
+          const  data = await fetchOptions(debouncedSearchText);
           if (isSubscribed) {
              setOptions(data);
         }
@@ -52,7 +55,7 @@ const AsyncAutocomplete = React.forwardRef<AsyncAutocompleteComponent,AsyncAutoc
     return () => {
       isSubscribed = false;
     };
-  }, [freeSolo ? debouncedSearchText : open]);
+  }, [freeSolo,debouncedSearchText,open,fetchOptions]);
 
   const textFieldProps: TextFieldProps = {
     margin: 'normal',

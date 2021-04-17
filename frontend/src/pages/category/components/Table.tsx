@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useReducer, useRef, useState} from 'react';
+import React, {useContext, useEffect,useRef, useState} from 'react';
 import format from "date-fns/format"
 import parseISO from "date-fns/parseISO"
 import categoryHttp from "../../../util/http/category-http";
@@ -11,7 +11,6 @@ import {Edit} from "@material-ui/icons";
 import {Link} from "react-router-dom";
 import FilterResetButton from "../../../components/Table/FilterResetButton";
 import useFilter from "../../../hooks/useFilter";
-import {Creators} from '../../../store/filter/index'
 import LoadingContext from "../../../components/loading/LoadingContext";
 
 
@@ -93,7 +92,6 @@ const Table = () => {
          debouncedFilterState,
          filterManager,
          filterState,
-         dispatch,
          totalRecords,
          setTotalRecords
      } = useFilter({

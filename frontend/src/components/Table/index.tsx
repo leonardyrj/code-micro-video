@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MUIDataTable, {MUIDataTableColumn, MUIDataTableOptions, MUIDataTableProps} from "mui-datatables";
 import {merge,omit, cloneDeep} from 'lodash';
-import {useTheme, Theme, MuiThemeProvider, debounce} from "@material-ui/core";
+import {useTheme, Theme, MuiThemeProvider} from "@material-ui/core";
 import DebouncedTableSearch from "./DebouncedTableSearch";
 
 

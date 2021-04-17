@@ -43,7 +43,7 @@ const UploadAction: React.FC<UploadActionProps> = (props) => {
             <ListItemSecondaryAction>
                 <span hidden={hover}>
                     {
-                        upload.progress == 1 && !error &&(
+                        upload.progress === 1 && !error &&(
                         <IconButton className={classes.successIcon} edge={"end"}>
                             <CheckCircleIcon/>
                         </IconButton>

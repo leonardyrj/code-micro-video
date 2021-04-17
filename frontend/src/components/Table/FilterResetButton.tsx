@@ -8,11 +8,11 @@ const useStyles = makeStyles(theme => ({
     iconButton: (theme as any).overrides.MUIDataTableToolbar.icon
 }))
 
-interface FilterResetButton {
+interface FilterResetButtonProps {
     handleClick: () => void
 }
 
-const FilterResetButton: React.FC<FilterResetButton> = (props) => {
+const FilterResetButton: React.FC<FilterResetButtonProps> = (props) => {
     const classes = useStyles();
     return (
         <Tooltip title={'Limpar Busca'}>
