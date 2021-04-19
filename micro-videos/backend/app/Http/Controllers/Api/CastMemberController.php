@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 class CastMemberController extends BaseCrudController
 {
 
-
     private $rules;
 
     public function __construct()
