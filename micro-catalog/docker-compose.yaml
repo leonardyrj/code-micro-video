@@ -20,8 +20,8 @@
       container_name: micro-catalog-elasticsearch
       environment:
         - discovery.type=single-node
-      volumes:
-        - ./.docker/elasticdata:/usr/share/elasticsearch/data
+#      volumes:
+#        - ./.docker/elasticdata:/usr/share/elasticsearch/data
       ports:
         - 9200:9200
       networks:
