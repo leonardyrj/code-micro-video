@@ -5,7 +5,8 @@ const config = {
   name: 'elastic',
   connector: 'esv6',
   index: 'catalog',
-  version: '7',
+  version: 7,
+  debug: process.env.APP_ENV === 'dev',
   //defaultSize: '',
   configuration: {
     "node": process.env.ELASTIC_SEARCH_HOST,
@@ -14,23 +15,45 @@ const config = {
 
   },
   "mappingProperties":{
-
+    "docType": {
+      "type": "keyword"
+    },
+    "id": {
+      "type": "keyword"
+    },
+    "name": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "is_active":{
+      "type": "boolean"
+    },
+    "created_at":{
+      "type": "date"
+    },
+    "updated_at":{
+      "type": "date"
+    }
   }
 };
-
 // Observe application's life cycle to disconnect the datasource when
 // application is stopped. This allows the application to be shut down
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
 // Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver('datasource')
 export class ElasticDataSource extends juggler.DataSource
-  implements LifeCycleObserver {
+    implements LifeCycleObserver {
   static dataSourceName = 'elastic';
   static readonly defaultConfig = config;
 
   constructor(
-    @inject('datasources.config.elastic', {optional: true})
-    dsConfig: object = config,
+      @inject('datasources.config.elastic', {optional: true})
+          dsConfig: object = config,
   ) {
     super(dsConfig);
   }
