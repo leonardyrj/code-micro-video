@@ -2,11 +2,11 @@ version: '3'
 
 services:
   app:
-    image: quay.io/keycloak/keycloak:12.0.4
+    image: quay.io/keycloak/keycloak:11.0.2
     container_name: micro-auth-app
     environment:
       - KEYCLOAK_USER=admin
-      - KEYCLOACK_PASSWORD=admin
+      - KEYCLOAK_PASSWORD=admin
       - DB_ADDR=db
       - DB_VENDOR=mysql
       - DB_DATABASE=micro_auth
@@ -24,7 +24,7 @@ services:
     restart: always
     tty: true
     ports:
-      - "33006:3306"
+      - "33007:3306"
     volumes:
       - ./.docker/dbdata:/var/lib/mysql
     environment:

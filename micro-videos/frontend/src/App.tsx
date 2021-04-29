@@ -15,7 +15,7 @@ const App: React.FC = () => {
             <LoadingProvider>
                 <SnackbarProvider>
                 <CssBaseline/>
-                <BrowserRouter>
+                <BrowserRouter basename="/admin">
                     <Spinner/>
                     <Navbar/>
                     <Box paddingTop={'70px'}>
