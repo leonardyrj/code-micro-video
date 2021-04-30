@@ -19,6 +19,7 @@
         "ramsey/uuid": "^3.9",
         "superbalist/laravel-google-cloud-storage": "^2.2",
         "tucker-eric/eloquentfilter": "^2.4",
+        "tymon/jwt-auth": "^1.0",
         "vizir/laravel-keycloak-web-guard": "^2.3"
     },
     "require-dev": {
