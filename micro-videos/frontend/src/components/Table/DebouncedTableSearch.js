@@ -36,7 +36,7 @@ const DebouncedTableSearch = ({ options, searchText, onSearch, onHide, debouceTi
     const [text, setText] = useState(searchText);
     let value = text;
 
-    const dispatchOnSearch = useCallback(debounce(value => onSearch(value),debouceTime),[]);
+    const dispatchOnSearch = useCallback(debounce(value => onSearch(value),debouceTime),[debouceTime]);
 
     useEffect(() => {
         dispatchOnSearch(text);
@@ -56,7 +56,7 @@ const DebouncedTableSearch = ({ options, searchText, onSearch, onHide, debouceTi
                 }
             }
         }
-    },[searchText, onSearch])
+    },[searchText, onSearch, onHide])
 
 
     const handleTextChange = event => {

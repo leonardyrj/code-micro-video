@@ -28,9 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Category::observe(SyncModelObserver::class);
-        Genre::observe(SyncModelObserver::class);
-        CastMember::observe(SyncModelObserver::class);
+        //Category::observe(SyncModelObserver::class);
+       // Genre::observe(SyncModelObserver::class);
+       // CastMember::observe(SyncModelObserver::class);
         \View::addExtension('html','blade');
 
 

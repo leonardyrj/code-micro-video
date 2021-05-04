@@ -8,14 +8,19 @@ import theme from "./theme";
 import SnackbarProvider from "./components/SnackbarProvider";
 import LoadingProvider from "./components/loading/LoadingProvider";
 import Spinner from "./components/Spinner";
+import {ReactKeycloakProvider} from '@react-keycloak/web';
+import {keycloak, keycloakConfig} from "./util/auth";
+
+
 
 const App: React.FC = () => {
     return (
+        <ReactKeycloakProvider authClient={keycloak} initOptions={keycloakConfig}>
         <MuiThemeProvider theme={theme}>
             <LoadingProvider>
                 <SnackbarProvider>
                 <CssBaseline/>
-                <BrowserRouter basename="/admin">
+                <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
                     <Spinner/>
                     <Navbar/>
                     <Box paddingTop={'70px'}>
@@ -26,6 +31,7 @@ const App: React.FC = () => {
              </SnackbarProvider>
             </LoadingProvider>
         </MuiThemeProvider>
+        </ReactKeycloakProvider>
         );
 };
 

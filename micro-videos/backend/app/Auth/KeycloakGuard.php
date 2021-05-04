@@ -2,12 +2,19 @@
 
 namespace App\Auth;
 
+use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Traits\Macroable;
 use Tymon\JWTAuth\JWT;
+use App\Models\User;
 
 class KeycloakGuard implements Guard
 {
+    use GuardHelpers, Macroable{
+        __call as macroCall;
+    }
+
     private $jwt;
     private $request;
 
@@ -15,5 +22,46 @@ class KeycloakGuard implements Guard
     {
         $this->jwt = $jwt;
         $this->request = $request;
+    }
+
+    public function __call($method, $parameters)
+    {
+        if (method_exists($this->jwt, $method)) {
+            return call_user_func_array([$this->jwt, $method], $parameters);
+        }
+
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
+
+        throw new BadMethodCallException("Method [$method] does not exist.");
+    }
+
+    public function user()
+    {
+        if ($this->user !== null) {
+            return $this->user;
+        }
+
+        if (
+            $token = $this->jwt->setRequest($this->request)->getToken() &&
+                ($payload = $this->jwt->check(true))
+        ) {
+            $roles = isset($payload['realm_access']) && property_exists($payload['realm_access'],'roles') ?
+                $payload['realm_access']->roles : [];
+
+            return $this->user = new User(
+                $payload['sub'],
+                $payload['name'],
+                $payload['email'],
+                $token,
+                $roles
+            );
+        }
+    }
+
+    public function validate(array $credentials = [])
+    {
+        throw new \Exception('Not implements');
     }
 }

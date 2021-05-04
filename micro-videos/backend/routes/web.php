@@ -18,7 +18,7 @@ Route::get('/', function () {
 // Where adiciona na variavel react que poder ser qualquer coisa.
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/admin/{react?}',function($react = null){
         return view('admin-frontend.index');
     })->where('react', '.*');

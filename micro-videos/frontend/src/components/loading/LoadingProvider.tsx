@@ -4,7 +4,8 @@ import {useEffect, useMemo, useState} from "react";
 import {
     addGlobalRequestInterceptor,
     addGlobalResponseInterceptor,
-    removeGlobalRequestInterceptor, removeGlobalResponseInterceptor
+    removeGlobalRequestInterceptor,
+    removeGlobalResponseInterceptor
 } from "../../util/http";
 
 interface LoadingProviderProps{
@@ -29,14 +30,14 @@ const LoadingProvider = (props: LoadingProviderProps) => {
         })
 
         const responseIds = addGlobalResponseInterceptor((response) =>{
-            if (isSubscribed && !response.config.headers.hasOwnProperty('x-ignore-loading')) {
+          //  if (isSubscribed && !response.config.headers.hasOwnProperty('x-ignore-loading')) {
                 decrementCountRequest();
-            }
+         //   }
             return response
         }, (error) => {
-            if (isSubscribed && !error.config.headers.hasOwnProperty('x-ignore-loading')) {
+          //  if (isSubscribed && !error.config.headers.hasOwnProperty('x-ignore-loading')) {
                 decrementCountRequest();
-            }
+        //    }
             return Promise.reject(error)
         })
 

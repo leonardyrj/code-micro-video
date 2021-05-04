@@ -1,4 +1,4 @@
- import {Dispatch, Reducer, useEffect, useReducer, useState} from "react";
+ import {Dispatch, Reducer, useEffect, useMemo, useReducer, useState} from "react";
 import reducer, {Creators} from "../store/filter";
 import {MUIDataTableColumn} from "mui-datatables";
 import {State as FilterState, Action as FilterActions} from "../store/filter/types";
@@ -29,7 +29,9 @@ interface UseFilterOptions extends Omit<FilterManageOptions,'history'>{
 
 export default function useFilter(options: UseFilterOptions){
     const history = useHistory();
-    const filterManager = new FilterManager({...options, history});
+    const filterManager = useMemo(() => {
+        return new FilterManager({...options, history});
+    },[])
     const INITIAL_STATE = filterManager.getStateFromURL();
     const [filterState, dispatch] = useReducer<Reducer<FilterState, FilterActions>>(reducer,INITIAL_STATE);
     const [totalRecords, setTotalRecords] = useState<number>(0);
