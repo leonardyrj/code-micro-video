@@ -111,8 +111,7 @@ export const Form = () => {
     const history = useHistory();
     const {id} = useParams<{id: string}>();
     const [video, setVideo] = useState<Video | null>(null);
-    console.log(id)
-    const loading = useContext(LoadingContext);
+     const loading = useContext(LoadingContext);
 
 
 

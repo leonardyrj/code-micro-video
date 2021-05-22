@@ -88,7 +88,6 @@ const Table = () => {
 
 
      const {
-
          debouncedFilterState,
          filterManager,
          filterState,
@@ -118,6 +117,7 @@ const Table = () => {
 
 
     async function getData(){
+        console.log("data")
         try {
             const {data} = await categoryHttp.list<ListResponse<Category>>({
                 queryParam: {

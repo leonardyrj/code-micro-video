@@ -37,7 +37,7 @@ export default function useFilter(options: UseFilterOptions){
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [debouncedFilterState] = useDebounce(filterState,options.debounceTime);
 
-
+    console.log(filterState)
     useEffect(() => {
         filterManager.replaceHistory();
     },[filterManager])
